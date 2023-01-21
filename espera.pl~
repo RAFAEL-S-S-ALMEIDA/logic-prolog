@@ -1,0 +1,176 @@
+espera(Esp) :-
+    Esp = tratamento(_,_,_,_,_),
+    %A pessoa que veio fazer uma obturação está lendo a revista Caras.
+    membro(A,Esp),
+    motivo(A,obturacao),
+    revista(A,caras),
+    %Quem está lendo a Veja está em algum lugar entre o Eduardo e quem está com a revista Galileu, nessa ordem.
+    entre(B,B1,B2,Esp),
+    paciente(B,eduardo),
+    revista(B1,veja),
+    revista(B2,galileu),
+    %Quem veio ajustar o Aparelho está em algum lugar entre quem está lendo Isto É e quem veio fazer a restauração, nessa ordem.
+    entre(C,C1,C2,Esp),
+    revista(C,istoe),
+    motivo(C1,aparelho),
+    motivo(C2,restauracao),
+    %O paciente da Dra. Raquel está lendo a revista Galileu.
+    membro(D,Esp),
+    dentista(D,raquel),
+    revista(D, galileu),
+    %O Álvaro é o paciente da Priscila.
+    membro(E,Esp),
+    paciente(E,alvaro),
+    dentista(E,priscila),
+    %O Marcos está em algum lugar entre o paciente de camisa Amarela e o Rodrigo, nessa ordem.
+    entre(F,F1,F2,Esp),
+    camisa(F,amarela),
+    paciente(F1,marcos),
+    paciente(F2,rodrigo),
+    %O paciente que veio fazer uma Restauração está em algum lugar entre quem veio tratar o Canal e quem veio fazer uma Obturação, nessa ordem.
+    entre(G,G1,G2,Esp),
+    motivo(G,canal),
+    motivo(G1,restauracao),
+    motivo(G2,obturacao),
+    %A pessoa de Amarelo está em algum lugar à esquerda do paciente agendado às 10:30.
+    algum_lugar_a_esquerda(H,H1,Esp),
+    camisa(H,amarela),
+    horario(H1,1030),
+    %A Raquel irá atender o paciente do meio.
+    terceiro(I,Esp),
+    dentista(I,raquel),
+    %Quem tem consulta às 10:15 está sentado em uma das pontas
+    uma_das_pontas(J,Esp),
+    horario(J,1015),
+    %O primeiro paciente será atendido pela Silvia.
+    primeiro(K,Esp),
+    dentista(K,silvia),
+    %O homem de camisa Azul está em algum lugar à esquerda de quem tem consulta as 11h.
+    algum_lugar_a_esquerda(L,L1,Esp),
+    camisa(L,azul),
+    horario(L1,11),
+    %A pessoa de camisa Verde está em algum lugar entre a pessoa com camisa Vermelha e a pessoa de camisa Azul.
+    entre(M,M1,M2,Esp),
+    camisa(M,vermelha),
+    camisa(M1,verde),
+    camisa(M2,azul),
+    %O quarto paciente será atendido as 10h.
+    quarto(N,Esp),
+    horario(N,10),
+    %O paciente da Dra Adriana está em algum lugar entre os pacientes das doutoras Raquel e Priscila, nessa ordem.
+    entre(O,O1,O2,Esp),
+    dentista(O,raquel),
+    dentista(O1,adriana),
+    dentista(O2,priscila),
+    %O paciente da Dra. Priscila está exatamente à direita de quem está com a revista Caras.
+    exatamente_a_direita(P,P1,Esp),
+    dentista(P,priscila),
+    revista(P1,caras),
+    %O homem de camisa Amarela está em algum lugar entre quem está lendo Isto É e quem veio de camisa Branca, nessa ordem.
+    entre(Q,Q1,Q2,Esp),
+    revista(Q,istoe),
+    camisa(Q1,amarela),
+    camisa(Q2,branca),
+    %fechamento
+    membro(T,Esp),
+    revista(T,epoca),
+    membro(T1,Esp),
+    dentista(T1,daniela),
+    membro(T2,Esp),
+    horario(T2,1045),
+    membro(T3,Esp),
+    motivo(T3,clareamento).
+
+
+
+
+
+
+
+
+
+
+
+
+camisa(doente(X,_,_,_,_,_),X).
+paciente(doente(_,X,_,_,_,_),X).
+revista(doente(_,_,X,_,_,_),X).
+dentista(doente(_,_,_,X,_,_),X).
+horario(doente(_,_,_,_,X,_),X).
+motivo(doente(_,_,_,_,_,X),X).
+
+membro(X,tratamento(X,_,_,_,_)).
+membro(X,tratamento(_,X,_,_,_)).
+membro(X,tratamento(_,_,X,_,_)).
+membro(X,tratamento(_,_,_,X,_)).
+membro(X,tratamento(_,_,_,_,X)).
+
+algum_lugar_a_esquerda(X,Y,tratamento(X,Y,_,_,_)).
+algum_lugar_a_esquerda(X,Y,tratamento(X,_,Y,_,_)).
+algum_lugar_a_esquerda(X,Y,tratamento(X,_,_,Y,_)).
+algum_lugar_a_esquerda(X,Y,tratamento(X,_,_,_,Y)).
+algum_lugar_a_esquerda(X,Y,tratamento(_,X,Y,_,_)).
+algum_lugar_a_esquerda(X,Y,tratamento(_,X,_,Y,_)).
+algum_lugar_a_esquerda(X,Y,tratamento(_,X,_,_,Y)).
+algum_lugar_a_esquerda(X,Y,tratamento(_,_,X,Y,_)).
+algum_lugar_a_esquerda(X,Y,tratamento(_,_,X,_,Y)).
+algum_lugar_a_esquerda(X,Y,tratamento(_,_,_,X,Y)).
+
+uma_das_pontas(X,tratamento(X,_,_,_,_)).
+uma_das_pontas(X,tratamento(_,_,_,_,X)).
+
+exatamente_a_direita(X,Y,tratamento(Y,X,_,_,_)).
+exatamente_a_direita(X,Y,tratamento(_,Y,X,_,_)).
+exatamente_a_direita(X,Y,tratamento(_,_,Y,X,_)).
+exatamente_a_direita(X,Y,tratamento(_,_,_,Y,X)).
+
+entre(X,Y,Z,tratamento(X,Y,_,_,Z)).
+entre(X,Y,Z,tratamento(X,_,Y,_,Z)).
+entre(X,Y,Z,tratamento(X,_,_,Y,Z)).
+entre(X,Y,Z,tratamento(_,X,Y,_,Z)).
+entre(X,Y,Z,tratamento(_,X,_,Y,Z)).
+entre(X,Y,Z,tratamento(_,_,X,Y,Z)).
+entre(X,Y,Z,tratamento(X,Y,_,Z,_)).
+entre(X,Y,Z,tratamento(X,_,Y,Z,_)).
+entre(X,Y,Z,tratamento(X,Y,Z,_,_)).
+entre(X,Y,Z,tratamento(_,X,Y,Z,_)).
+
+primeiro(X,tratamento(X,_,_,_,_)).
+segundo(X,tratamento(_,X,_,_,_)).
+terceiro(X,tratamento(_,_,X,_,_)).
+quarto(X,tratamento(_,_,_,X,_)).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
